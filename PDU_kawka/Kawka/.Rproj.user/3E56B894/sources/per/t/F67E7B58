@@ -1,0 +1,28 @@
+{
+    "id": "F67E7B58",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1622304565765.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "id": "b1d34ef7588b4168bbf09ed35e6482e3",
+        "name": "<users>",
+        "title": "xml_Users",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 0,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1622304565765,
+    "read_only": false,
+    "read_only_alternatives": []
+}
