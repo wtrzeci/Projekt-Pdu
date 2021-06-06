@@ -2,18 +2,19 @@
 title: "Raport_Czesc_1"
 author: "Witold Trzeciakowski"
 date: "6/1/2021"
-output:
-  html_document:
-    theme: united
-    highlight: tango
+output: slidy_presentation
 
 ---
 ```{r setup, include=F}
 knitr::opts_chunk$set(include = T)
 ```
-<center>  ***ZAPYTANIE 1***  </center>
+## zapytanie 1
+
 Chcemy wylowic najlepszego kawiarza na forum. Człowieka który ma jak najwięszy wkład w społeczność. W tym celu musimy ustalic jakies kryterium. mozemy to zrobic po wyniku,jednak ja zastosuje inne rozwiązanie.
 Proponuje wprowadzić indeks popularności ( roboczo nazwany "cytowaniami"). Jest to system oceny twórców, na naszym forum który bierzę pod uwagę odwołania do naszego posta i postów innych. Dzięki temu dowiemy się czy na naszym forum są posty zachęcające do dyskusji.
+
+## Najważniejsze Posty
+
 ```{r Zadanie 1, results='asis',include = TRUE, echo=F ,warning=FALSE,message=FALSE,error=FALSE}
 library(knitr)
 library(xtable)
@@ -46,6 +47,8 @@ a <- head(a,10)
 a <- arrange(a,desc(OgolneCytowania))
 a %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
 ```
+## Wykresy zwiazane z cytowaniami
+
 Na pierwszy rzut oka mogłoby się wydawać że wykres punktow powinien rosnąć liniowo razem z indeksem cytowań, jednak okazuje się że nie jest to prawda.  
 ```{r Zadanie 4, echo=F, error=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   source("Witold_Trzeciakowski_313419.R")
@@ -71,7 +74,9 @@ segments(al[1], al[3], al[2], al[4], col='blue')
 <br/>
 Jak widzimy wartosci te nie rosną liniowo. Okazuje sie zatem ze uzytkownicy ktorych posty sa najwazniejsze dla spoleczności wcale nie maja wysokich ocen. 
 <br/>
-  ***Kawowe pytanie 2*** 
+
+## Pytanie o wplyw na swiat
+
 <br/>
 Teraz chcialem zbadać wykres cen kawy w zależności od aktywnosci na forum
 <br/> 
@@ -88,6 +93,9 @@ rysowanie_aktywnosc(daty)
 <br/>
 Zauwazylismy teraz z o dziwo ( kto by sie spodziewal) nie ma korelacji pomiedzy aktywnoscia na forum a cena kawy.Jednak latwo mozna zauwazyc ze forum najpewniej umiera. Ciekawi mnie teraz czy nasi kawowi guru tez sie wylaczyli z forum w ostatnim czasie.
 <br/>
+
+## Wykresy odchodzenia
+
   ```{r Zadanie 8, include = TRUE, echo=F ,warning=FALSE,message=FALSE,error=FALSE}
 a <- last_activity()
 wykres_aktywnosc(a)
