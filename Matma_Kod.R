@@ -101,19 +101,21 @@ rysowanie_mapy <- function(wynik=wynik)
 mapy <- inner_join(mapy,wynik,by='Country')
 mapy <- arrange(mapy,desc(NumberOfUsers))
 mapy <- head(mapy, 20)
-leaflet(mapy)%>%
+m <- leaflet(mapy)%>%
   addTiles()%>%
   addMarkers(label = ~NumberOfUsers) }
 #rysujemy ile osob pochodzi z jakich krajow
 rysowanie_mapy(wynik = wynik )
 #badamy lokalizacje najaktywniejszych
-rysowanie_mapy(wynik = head(wynik,1000) )
+b <- rysowanie_mapy(wynik = head(wynik,1000) )
 #chcemy to teraz porownac z mapa topowych uniwersytetow, dane zaczerpniete z 
 #rankingu Center for World University Rankings
-zamiana_
-uniwersytety <- select(ranking, world_rank, country) %>% filter(world_rank<=150)%>%
-group_by(country) %>% count(country)
+zamiana_danych_uniwerki <- function(ranking=ranking)
+{uniwersytety <- select(ranking, world_rank, country) %>% filter(world_rank<=150)%>%
+group_by(country) %>% count(country)}
+uniwersytety <- zamiana_danych_uniwerki(ranking=ranking)
 colnames(uniwersytety) <- c('Country','NumberOfUsers')
-rysowanie_mapy(wynik = uniwersytety )
- 
+a<-rysowanie_mapy(wynik = uniwersytety )
+#widzimy ze te mapy sie ze soba pokrywaja. Najlepsze uniwersytety w stanach i w Europie, punkty takie 
+#jak izrael tez dzialaja.
 
