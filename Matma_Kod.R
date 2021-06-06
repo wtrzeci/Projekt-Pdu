@@ -118,4 +118,68 @@ colnames(uniwersytety) <- c('Country','NumberOfUsers')
 a<-rysowanie_mapy(wynik = uniwersytety )
 #widzimy ze te mapy sie ze soba pokrywaja. Najlepsze uniwersytety w stanach i w Europie, punkty takie 
 #jak izrael tez dzialaja.
+<<<<<<< Updated upstream
 
+=======
+#porownajmy teraz odchodzenie uzytkownikow 
+wykres_komentarze_czas <-function (Votes=Votes)
+{
+  wynik <- Votes
+  wynik <- select(wynik, CreationDate )
+  wynik$CreationDate <- gsub('.{16}$', '', wynik$CreationDate)
+  wynik <- wynik %>% group_by(CreationDate) %>% count(CreationDate)
+  wynik <- wynik$n
+  wynik <- ts(wynik, start=c(2015, 1, 1), end=c(2021, 1,1), frequency=12) 
+  ts_plot(wynik,Xtitle="Lata",Ytitle='Ilosc komentarzy(na miesiac)', title='Komentarze od Czasu')
+}
+wykres_komentarze_czas(Votes)
+wykres_ubywania <- function(Users=Users)
+{
+  uzytkownicy <- Users
+  uzytkownicy$LastAccessDate <- gsub('.{16}$', '', uzytkownicy$LastAccessDate)
+  uzytkownicy <- uzytkownicy %>% group_by(LastAccessDate) %>% count(LastAccessDate)
+  colnames(uzytkownicy) <- c('LastAccessDate','LastSeenAccounts')
+  dochodzenie <- Users
+  dochodzenie$CreationDate <- gsub('.{16}$', '', dochodzenie$CreationDate)
+  dochodzenie <- dochodzenie %>% group_by(CreationDate) %>% count(CreationDate)
+  colnames(dochodzenie) <- c('LastAccessDate','NewAccounts')
+  wynik <- inner_join(dochodzenie,uzytkownicy,by='LastAccessDate')
+  wynik['HowMuchLeft'] <- wynik['NewAccounts'] - wynik['LastSeenAccounts']
+  wynik <- wynik$HowMuchLeft
+  wynik<- ts(wynik, start=c(2015, 1, 1), end=c(2021, 1,1), frequency=12) 
+  ts_plot(wynik,Xtitle="Lata",Ytitle='Ilosc kont ktore przybyly', title='Ubywanie czlonkow')
+  
+}
+wykres_ubywania(Users)
+#zobaczmy jeszcze jak wygladaja cytowania 
+cytowania<- Cytowania(links=PostLinks,Posts=Posts)
+#znajdzmy najlepszych kawowych guru, i dowiedzmy sie czegos o nich
+Kawiarze_cytowania <- function(Users=Users,cytowania=cytowania)
+{
+  uzytkownicy <- Users
+  uzytkownicy <- select(uzytkownicy,Id,Reputation,DisplayName,Location,CreationDate)
+  colnames(uzytkownicy)[1] <- 'OwnerUserId'
+  wynik <- inner_join(cytowania,uzytkownicy,'OwnerUserId')
+  wynik <- select(wynik,cytowania,Score,LinksToScoreRatio,OwnerUserId,DisplayName,Location,CreationDate)
+  #chcemy wiedziec ile kawiarzy zdobylo jaka sume pkt i ile mieli cytowan.
+  
+  wynik <- wynik  %>% group_by(OwnerUserId,DisplayName,Location,CreationDate) %>% summarise(OgolneCytowania=sum(cytowania),Wyniki=sum(Score))
+  a <- arrange(wynik,desc(OgolneCytowania)) #Dostalismy najbardziej cytowanych 20
+  head(a,20)
+}
+a <- Kawiarze_cytowania(Users=Users,cytowania=cytowania)
+last_activity <- function(a=a){
+  uzytkownicy <- Users
+  colnames(uzytkownicy)[1] <- "OwnerUserId"
+  wynik <- inner_join(a,uzytkownicy,"OwnerUserId")
+  wynik <- select(wynik,DisplayName.x,LastAccessDate)
+  wynik$LastAccessDate <- gsub('.{19}$', '', wynik$LastAccessDate)
+  wynik
+}
+a <- last_activity(a=a)
+odchodzenie_cytowanych <- function(a=a){
+a <- a %>% group_by(LastAccessDate) %>% count(LastAccessDate)
+a$LastAccessDate <- as.numeric(a$LastAccessDate)
+barplot(a$n,names.arg = a$LastAccessDate, xlab = "Lata", ylab = 'Ilosc osob', main = 'Wykres odchodzących ludzi ( top 20 cytowanych) od czasu')
+}
+>>>>>>> Stashed changes
