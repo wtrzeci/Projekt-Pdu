@@ -118,9 +118,6 @@ colnames(uniwersytety) <- c('Country','NumberOfUsers')
 a<-rysowanie_mapy(wynik = uniwersytety )
 #widzimy ze te mapy sie ze soba pokrywaja. Najlepsze uniwersytety w stanach i w Europie, punkty takie 
 #jak izrael tez dzialaja.
-<<<<<<< Updated upstream
-
-=======
 #porownajmy teraz odchodzenie uzytkownikow 
 wykres_komentarze_czas <-function (Votes=Votes)
 {
@@ -182,4 +179,3 @@ a <- a %>% group_by(LastAccessDate) %>% count(LastAccessDate)
 a$LastAccessDate <- as.numeric(a$LastAccessDate)
 barplot(a$n,names.arg = a$LastAccessDate, xlab = "Lata", ylab = 'Ilosc osob', main = 'Wykres odchodzących ludzi ( top 20 cytowanych) od czasu')
 }
->>>>>>> Stashed changes
