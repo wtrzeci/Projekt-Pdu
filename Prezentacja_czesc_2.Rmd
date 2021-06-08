@@ -1,0 +1,180 @@
+---
+title: "Raport Część II"
+author: "Natalia Wojciechowska, Witold Trzeciakowski"
+date: "8 06 2021"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+## Wczytanie kodu
+
+- Na początku załadujmy potrzebne pliki.
+
+Potrzebne tabele, funkcje i biblioteki zostały wczytane z poniższego pliku.
+
+```{r ladowanie, results='hide', warning=FALSE, echo=TRUE}
+source("kod_raport_2.R")
+```
+
+- Zajmiemy się teraz analizą serwisu Pets Stack Exchange, chociaż 
+przedstawiane analizy można by było zastosować do innych omawianych przez nas
+serwisów.
+
+## Wybór najlepszych użytkowników
+
+Wszystkie serwisy Stack Exchenge są tworzone przez nikogo innego jak
+użytkowników. Jak wiadomo wkład poszczególnych członków społeczności jest
+niezwykle zróżnicowany. Są więc ustalone pewne kryteria, dzięki którym 
+możemy wyłonić najważniejszych użytkowników, którzy mają ogromny wpływ
+na działanie serwisu. Domyślnie użytkownicy są porównywani przy pomocy
+reputacji. Teoretycznie im większa reputacja, tym większym zaufaniem jest
+obdarzony użytkownik i tym większy jest jego wkład w rozwój serwisu.
+Co jednak gdy nieco zmienimy kryteria wyboru najlepszych członków społeczności?
+
+- Na początku zobaczmy 10 użytkowników z największą **reputacją**. 
+
+```{r reputacja}
+naj_rep <- najlepsi_reputacja(Users)
+naj_rep %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
+```
+
+- Są to osoby, które serwis Pets Stack Exchange uznaje za najbardziej
+wartościowych członków.
+
+- Zobaczmy 10 użytkowników z największą **liczbą odznak**, które są przyznawane za mniejsze lub większe osiągnięcia w serwisie.
+
+```{r odznaki}
+naj_odz <- najlepsi_odznaki(Badges, Users)
+naj_odz %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
+```
+
+- Warto wiedzieć, że odznaki nie są równe. W zależności od trudności zdobycia
+osiągnięcia można uzyskać brązową, srebrną lub złotą odznakę. Oczywiście złota
+odznaka jest najtrudniejsza do zdobycia, więc mają na to szansę tylko najbardziej
+aktywni członkowie społeczności.
+
+- Sprawdźmy teraz jak wyglądałby nasz ranking, gdybyśmy pod uwagę brali jedynie **złote odznaki**.
+
+```{r zlote_odznaki}
+naj_zl_odz <- najlepsi_zlote_odznaki(Badges)
+naj_zl_odz %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
+```
+
+- Następnie zobaczmy czyje pytania najbardziej przyciągnęły internautów do serwisu Pets. W tym celu znajdźmy **sumę wyświetleń** opublikowanych postów dla użytkowników.
+
+```{r wyswietlenia}
+naj_wys <- najlepsi_wyswietlenia(Users, Posts)
+naj_wys %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
+```
+
+- Możemy zauważyć, że wielu użytkowników się pojawia w więcej niż jednej tabeli.
+Wynika stąd, że aktywność najbardziej cenionych członków społeczności Pets
+musi być wszechstronna.
+
+```{r najlepsi}
+najlepsi <- najlepsze_wszystko(naj_odz, naj_rep, naj_wys, naj_zl_odz)
+najlepsi %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
+```
+
+- Jak widzimy są 4 osoby, które znalazły się we wszystkich rankingach popularności.
+Zatem najważniejsze osoby na forum muszą być wszechstronne i udzielają się
+w wielu aspektach.
+
+## Liczba pytań i odpowiedzi na forach
+
+- Zbadajmy ile pojawiało się pytań i odpowiedzi na serisach Pets i Mathematica w poszczególnych latach.
+
+- Zacznijmy od serwisu Pets.
+
+```{r pytania_pets}
+pytania <- questions_answers_per_year_pets(Posts)
+pytania
+```
+
+- Zobaczmy teraz to samo dla serwisu Mathematica.
+
+```{r pytania_math}
+pytania <- questions_answers_per_year_math(Posts_math)
+pytania
+```
+
+- Zauważmy, że dla obydwu serwisów stosunek udzielonych odpowiedzi do zadanych
+pytań jest podobny i nie zmienia się tak bardzo na przełomie lat. 
+
+- Przyjrzyjmy się jednak temu wspólczynnikowi nieco bliżej i porównajmy dla
+naszych dwóch serwisów.
+
+```{r answersratio}
+answersratio <- answers_ratio_plot(Posts, Posts_math)
+answersratio
+```
+
+- Chociaż, jak widać z poprzednich wykresów, serwis Mathematica jest bardziej
+popularny, to więcej odpowiedzi na zadane pytania jest w serwisie Pets. Szczególnie jest to widoczne w obecnym roku. Można wyciągnąć wniosek, iż społeczność serwisu Pets jest mniej liczna, jednak bardziej aktywna.
+
+## Wykresy aktywności
+
+- Zobaczmy wykresy aktywności na badanych serwisach.
+
+```{r wykresy_serwisy}
+# PETS
+daty_pets <- Znajdowanie_wykresu_daty(PostsPets)
+wykres_pets <- rysowanie_aktywnosc(daty_pets)
+wykres_pets
+  
+# KAWA
+daty_kawa <- Znajdowanie_wykresu_daty(PostsKawa)
+wykres_kawa <- rysowanie_aktywnosc(daty_kawa)
+wykres_kawa
+
+ # MATH
+daty_math <- Znajdowanie_wykresu_daty(PostsMath)
+wykres_math <-rysowanie_aktywnosc(daty_math)
+wykres_math
+```
+
+- Porównajmy te wykresy. Zobaczmy najpierw same Pets i Coffee, ponieważ aktywność na Mathematica jest wielokrotnie większa.
+
+```{r wykresy_pets_coffee}
+tabelka <- generowanie_tabelka_do_wykresu(PostsPets, PostsKawa, PostsMath)
+wykres_aktywnosc_pets_coffee(tabelka)
+```
+
+- Jak widać od roku od roku 2016 aktywność na tych serwisach jest na podobnym niewielkim poziomie, choć można dostrzec powolną tendencje spadkową.
+
+- Zobaczmy na koniec wszystkie trzy wykresy jednocześnie.
+
+```{r wykresy_razem}
+tabelka <- generowanie_tabelka_do_wykresu(PostsPets, PostsKawa, PostsMath)
+wykres_aktywnosc_wszystkie(tabelka)
+```
+
+- Serwis Mathematica w przeciwieństwie do pozostałych z roku na rok zyskuje coraz większą popularność i jego aktywność jest od lat wielokrotnie większa od pozostałych serwisów.
+
+## Media społecznościowe
+
+- Porównajmy teraz aktywność użytkowników mediów społecznościowych z aktywnością na naszych serwisach.
+
+- Na początku zobaczmy wykresy jedynie dla trzech popularnych serwisów.
+Dane pochodzą z serwisu *https://ourworldindata.org/rise-of-social-media*.
+
+```{r facebook_instagram_twitter}
+wykres_social_media_trzy(Spolecznosciowe)
+```
+
+- Jak widzimy aktywność na serwisach społecznościowych systematycznie rośnie i jest na niezwykle wysokim poziomie.
+
+- Zobaczymy teraz wykresy aktywności dla większości popularnych serwisów 
+i zastanówmy się nad ogólną tendencją.
+
+```{r spolecznosci_wszystkie}
+wykres_social_media_wszystkie(Spolecznosciowe)
+```
+
+-Możemy wyciągnąć wniosek, iż wraz ze wzrostem serwisów społecznościowych
+takich jak Twitter, Facebook, Instagram, Tik Tok itp., zastępują one
+serwisy dotyczące zainteresowań. Próżno jednak na nich szukać wartościowych rozwiązań na problemy matematyczne, dlatego serwis Mathematica, nie mając swojego odpowiednika, wciąż zyskuje na popularności.
