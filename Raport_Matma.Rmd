@@ -1,0 +1,64 @@
+---
+title: "Raport_czesc_3"
+author: "Witold Trzeciakowski Natalia Wojciechowska"
+date: "6/8/2021"
+output: slidy_presentation
+---
+##Porównania aktywności z forum kawowym 
+
+***WORK IN PROGRESS***
+</br>
+Zobaczmy dlaczego warto zainteresowac sie tym forum matematycznym
+</br>
+```{r Matma 1, results='asis',include = F, echo=F ,warning=FALSE,message=FALSE,error=FALSE}
+library(knitr)
+library(xtable)
+library(kableExtra)
+library(reactable)
+
+```
+![wykres.](/Users/witek/Desktop/PDU_Matma/PDU_MATMA/Rplot.png)
+</br> Jak Widac jest spory rozstrzał pomiędzy ludźmi na forum kawowym a naszymi matematykami. Forum matematyczne jest o wiele bardziej zaludnione</br>
+
+![wykres2.](/Users/witek/Desktop/PDU_Matma/PDU_MATMA/wykres_aktywnosc_kawa.png)
+## Cytowania
+Podobnie jak w przypadku kawiarzy znajdziemy matematykow o dobrych indeksach 'cytowan'</br>
+```{r Cytowania, results='asis',include = TRUE, echo=F ,warning=FALSE,message=FALSE,error=FALSE}
+source('/Users/witek/Desktop/PDU_Matma/PDU_MATMA/Matma_Kod.R')
+
+a <- Kawiarze_cytowania(Users=Users,cytowania=cytowania)
+a <- select(a,DisplayName,Location,OgolneCytowania,Wyniki)
+a <- head(a,10)
+a <- arrange(a,desc(OgolneCytowania))
+a %>% kable() %>% kableExtra::kable_styling(full_width = T, bootstrap_options = 'striped')
+
+```
+</br> Co ciekawe nasi matematycy tez nie traktuja forum bardzo poważnie, większoć nicków jest zabawna/niepoważna. Użytkownicy traktują siebie z dystansem. Ciekawi mnie teraz czy takie forum może mieć mierzalny wpływ na świat. W tym celu sprawdźmy najbardziej postujące kraje i porównajmy ich poziom uniwersytetów, czy jest on spójny z naszymi wynikami. </br>
+
+## Mapy
+***Problemy z Badaniem lokalizacji***</br>
+Uzytkownicy math stack exchange nie muszą podawać swojej lokalizacji, jednak mogą to zrobić. Zbadamy zatem tych którzy je Podali.
+![Lokalizacja.](/Users/witek/Desktop/PDU_Matma/PDU_MATMA/Zrzut ekranu 2021-06-8 o 16.39.35.png)
+</br> Widzimy że jedna i tą samą lokalizacje można przedstawić na dwa sposoby. Kilka większych jak na przykład UK(United Kingdom) czy US(USA lub United States of America)
+
+![Lokalizacja2.](/Users/witek/Desktop/PDU_Matma/PDU_MATMA/Zrzut ekranu 2021-06-8 o 16.40.20.png)
+</br> Zatem po tych wszystkich wyjasnieniach mozemy zobaczyć mapę top 20 najmocniej postujących narodów na naszym forum. </br>
+```{r Matma 3, results='asis',include = TRUE, echo=F ,warning=FALSE,message=FALSE,error=FALSE}
+source('/Users/witek/Desktop/PDU_Matma/PDU_MATMA/Matma_Kod.R')
+
+
+a<- rysowanie_mapy(wynik = wynik )
+a
+
+```
+
+</br>Mieliśmy natomiast zbadać wpływ naszego forum na jakość uniwersyteów. 
+
+```{r Matma 4, results='asis',include = TRUE, echo=F ,warning=FALSE,message=FALSE,error=FALSE}
+
+
+a<- slabe_rankingi_duzo_zapytan(wynik=wynik,uniwersytety=uniwersytety)
+a
+
+```
+Widzimy ze w 20 najcześciej postujących krajach tylko 7 nie ma uniwersytetów w top 150 świata. Zatem pewna korelacja jest. Co ciekawe Polska jest jednym z tych krajów
